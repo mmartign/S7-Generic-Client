@@ -7,3 +7,6 @@ It can read/write on the PLC DBs variables of tyeps BOOL,INT,DINT and STR50 (str
 This communication utility is used by Spazio IT in its Industry 4.0 solutions, see:
 https://www.spazioit.com/pages_en/sol_inf_en/industry-4-0-spazio-it-en/
 
+This work is licensed under the terms of the Lesser GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+Please see https://www.gnu.org/licenses/ to get more information.
