@@ -203,7 +203,7 @@ int main(int argc, char *argv[]) {
         } else {
             if (strcmp(argv[5], "BOOL") == 0) {
                 if (sscanf_s(argv[6], "%hhu", &boolValue) == 1) {
-                    client->DBRead(dBNum, start, 1, (void *) &boolValue);
+                    client->DBWrite(dBNum, start, 1, (void *) &boolValue);
                     fprintf(stderr, "WROTE: %hhu\n", boolValue);
                 } else {
                     usage("WRONG_CONSOLE_READ");
@@ -212,7 +212,7 @@ int main(int argc, char *argv[]) {
             } else if (strcmp(argv[5], "INT") == 0) {
                 if (sscanf_s(argv[6], "%hd", &intValue) == 1) {
                     swapBinary((uint16_t &) intValue);
-                    client->DBRead(dBNum, start, 2, (void *) &intValue);
+                    client->DBWrite(dBNum, start, 2, (void *) &intValue);
                     swapBinary((uint16_t &) intValue);
                     fprintf(stderr, "WROTE: %hd\n", intValue);
                 } else {
@@ -222,7 +222,7 @@ int main(int argc, char *argv[]) {
             } else if (strcmp(argv[5], "DINT") == 0) {
                 if (sscanf_s(argv[6], "%d", &dintValue) == 1) {
                     swapBinary((uint32_t &) dintValue);
-                    client->DBRead(dBNum, start, 4, (void *) &dintValue);
+                    client->DBWrite(dBNum, start, 4, (void *) &dintValue);
                     swapBinary((uint32_t &) dintValue);
                     fprintf(stderr, "WROTE: %d\n", dintValue);
                 } else {
@@ -236,7 +236,7 @@ int main(int argc, char *argv[]) {
                     for (int i = 0; i < strBuffer[i]; i++) {
                         strBuffer[i+2] = strValue[i];
                     }
-                    client->DBRead(dBNum, start, STR_LEN+2, (void *) strBuffer);
+                    client->DBWrite(dBNum, start, STR_LEN+2, (void *) strBuffer);
                     fprintf(stderr, "WROTE: %s\n", strValue);
                 } else {
                     usage("WRONG_CONSOLE_READ");
