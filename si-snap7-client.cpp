@@ -85,6 +85,8 @@ uint8_t  strBuffer[STR_LEN+2];
 #define WRONG_CONSOLE_READ                  -8
 #define WRONG_CONNECTION                    -9
 
+#define MY_SELF "si-snap7-client"
+
 /*
  * Swap functions to handle endianess
  */
@@ -105,12 +107,12 @@ void usage(const char * error)
         fprintf(stderr, "Error: %s!\n", error);
     }
     fprintf(stderr, "Usage:\n");
-    fprintf(stderr, "  si-client <ipaddress> -r|-w <dbnumber> <start> <type> [<value>]\n");
+    fprintf(stderr, "  %s <ipaddress> -r|-w <dbnumber> <start> <type> [<value>]\n", MY_SELF);
     fprintf(stderr, "valid types are: BOOL, INT, DINT, STR50 (string of max 50 chars);\n");
     fprintf(stderr, "example:\n");
-    fprintf(stderr, "  si-client 10.10.100.125 -r  1000 0 STR50\n");
+    fprintf(stderr, "  %s 10.10.100.125 -r  1000 0 STR50\n", MY_SELF);
     fprintf(stderr, "or:\n");
-    fprintf(stderr, "  si-client 10.10.100.125 -w  1001 0 STR50 \"Fred\"\n");
+    fprintf(stderr, "  %s 10.10.100.125 -w  1001 0 STR50 \"Fred\"\n", MY_SELF);
 }
 
 /*
@@ -176,7 +178,7 @@ int main(int argc, char *argv[]) {
         if (strcmp(argv[2], "-r") == 0) {
             if (strcmp(argv[5], "BOOL") == 0) {
                 client->DBRead(dBNum, start, 1, (void *) &boolValue);
-                printf("%u\n", boolValue);
+                printf("%hhu\n", boolValue);
                 fprintf(stderr, "READ: %hhu\n", boolValue);
             } else if (strcmp(argv[5], "INT") == 0) {
                 client->DBRead(dBNum, start, 2, (void *) &intValue);
