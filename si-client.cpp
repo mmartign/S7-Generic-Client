@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 #include "snap7.h"
 
 #ifdef OS_WINDOWS
@@ -230,18 +231,15 @@ int main(int argc, char *argv[]) {
                     ret_val = WRONG_CONSOLE_READ;
                 }
             } else  {
-                if (sscanf_s(argv[6], "%s", strValue) == 1) {
-                    strBuffer[0] = STR_LEN;
-                    strBuffer[1] = strlen((char *) strValue);
-                    for (int i = 0; i < strBuffer[i]; i++) {
-                        strBuffer[i+2] = strValue[i];
-                    }
-                    client->DBWrite(dBNum, start, STR_LEN+2, (void *) strBuffer);
-                    fprintf(stderr, "WROTE: %s\n", strValue);
-                } else {
-                    usage("WRONG_CONSOLE_READ");
-                    ret_val = WRONG_CONSOLE_READ;
+                strncpy((char *) strValue, argv[6], STR_LEN);
+                strValue[strlen(argv[6])] = '\0';
+                strBuffer[0] = STR_LEN;
+                strBuffer[1] = strlen((char *) strValue);
+                for (int i = 0; i < strBuffer[i]; i++) {
+                    strBuffer[i+2] = strValue[i];
                 }
+                client->DBWrite(dBNum, start, STR_LEN+2, (void *) strBuffer);
+                fprintf(stderr, "WROTE: %s\n", strValue);
             }
         }
         client->Disconnect();
