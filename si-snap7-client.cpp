@@ -72,6 +72,7 @@ void sysSleep(longword Delay_ms)
 uint8_t  boolValue = 0;
 int16_t  intValue = 0;
 int32_t  dintValue = 0;
+float    realValue = 0;
 uint8_t  strValue[STR_LEN];
 uint8_t  strBuffer[STR_LEN+2];
 
@@ -108,7 +109,7 @@ void usage(const char * error)
     }
     fprintf(stderr, "Usage:\n");
     fprintf(stderr, "  %s <ipaddress> -r|-w <dbnumber> <start> <type> [<value>]\n", MY_SELF);
-    fprintf(stderr, "valid types are: BOOL, INT, DINT, STR50 (string of max 50 chars);\n");
+    fprintf(stderr, "valid types are: BOOL, INT, DINT, REAL, STR50 (string of max 50 chars);\n");
     fprintf(stderr, "example:\n");
     fprintf(stderr, "  %s 10.10.100.125 -r  1000 0 STR50\n", MY_SELF);
     fprintf(stderr, "or:\n");
@@ -153,6 +154,7 @@ int main(int argc, char *argv[]) {
     if (strcmp(argv[5], "BOOL") != 0 &&
         strcmp(argv[5], "INT") != 0 && 
         strcmp(argv[5], "DINT") != 0 && 
+        strcmp(argv[5], "REAL") != 0 && 
         strcmp(argv[5], "STR50") != 0) {
         usage("WRONG_TYPE");
         return WRONG_TYPE;
@@ -190,6 +192,11 @@ int main(int argc, char *argv[]) {
                 swapBinary((uint32_t &) dintValue);
                 printf("%d\n", dintValue);
                 fprintf(stderr, "READ: %d\n", dintValue);
+            } else if (strcmp(argv[5], "REAL") == 0) {
+                client->DBRead(dBNum, start, 4, (void *) &realValue);
+                swapBinary((uint32_t &) realValue);
+                printf("%f\n", realValue);
+                fprintf(stderr, "READ: %f\n", realValue);
             } else  {
                 client->DBRead(dBNum, start, STR_LEN+2, strBuffer);
                 int len = min(strBuffer[1], STR_LEN);
@@ -228,6 +235,16 @@ int main(int argc, char *argv[]) {
                     client->DBWrite(dBNum, start, 4, (void *) &dintValue);
                     swapBinary((uint32_t &) dintValue);
                     fprintf(stderr, "WROTE: %d\n", dintValue);
+                } else {
+                    usage("WRONG_CONSOLE_READ");
+                    ret_val = WRONG_CONSOLE_READ;
+                }
+            } else if (strcmp(argv[5], "REAL") == 0) {
+                if (sscanf_s(argv[6], "%f", &realValue) == 1) {
+                    swapBinary((uint32_t &) realValue);
+                    client->DBWrite(dBNum, start, 4, (void *) &realValue);
+                    swapBinary((uint32_t &) realValue);
+                    fprintf(stderr, "WROTE: %f\n", realValue);
                 } else {
                     usage("WRONG_CONSOLE_READ");
                     ret_val = WRONG_CONSOLE_READ;
